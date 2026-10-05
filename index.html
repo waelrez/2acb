@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2AC B — Class Portal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --bg:#07101f;
+  --panel:#0d1729;
+  --panel2:#111e33;
+  --line:#20304a;
+  --text:#f4f7fb;
+  --muted:#8fa1b8;
+  --blue:#4f8cff;
+  --cyan:#35d9ff;
+  --green:#35d39a;
+  --orange:#ffb454;
+  --red:#ff6378;
+  --purple:#9b7cff;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(79,140,255,.13),transparent 30%),
+    radial-gradient(circle at 90% 20%,rgba(155,124,255,.10),transparent 25%),
+    var(--bg);
+  color:var(--text);
+  min-height:100vh;
+}
+
+button,input,select{font:inherit}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:260px;
+  background:rgba(7,16,31,.94);
+  border-right:1px solid var(--line);
+  padding:22px 15px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:5px 8px 25px;
+}
+
+.logo{
+  width:45px;
+  height:45px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  box-shadow:0 10px 30px rgba(79,140,255,.25);
+}
+
+.brand h1{font-size:17px}
+.brand p{font-size:11px;color:var(--muted);margin-top:3px}
+
+.nav-title{
+  color:#61728a;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  padding:15px 12px 8px;
+}
+
+.nav button{
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#aebbd0;
+  padding:12px 13px;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  cursor:pointer;
+  text-align:left;
+  margin:3px 0;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:linear-gradient(90deg,rgba(79,140,255,.18),rgba(79,140,255,.05));
+  color:white;
+}
+
+.nav-icon{
+  width:22px;
+  text-align:center;
+  font-size:16px;
+}
+
+.trial{
+  position:absolute;
+  bottom:18px;
+  left:15px;
+  right:15px;
+  padding:14px;
+  border:1px solid rgba(53,217,255,.25);
+  background:rgba(53,217,255,.06);
+  border-radius:14px;
+}
+
+.trial strong{
+  display:block;
+  font-size:12px;
+  color:var(--cyan);
+  margin-bottom:5px;
+}
+
+.trial span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* MAIN */
+.main{
+  margin-left:260px;
+  width:calc(100% - 260px);
+  padding:25px;
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.mobile-menu{
+  display:none;
+}
+
+.search{
+  flex:1;
+  max-width:450px;
+  position:relative;
+}
+
+.search input{
+  width:100%;
+  padding:13px 16px 13px 42px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  color:white;
+  outline:none;
+}
+
+.search input:focus{
+  border-color:var(--blue);
+}
+
+.search-icon{
+  position:absolute;
+  left:15px;
+  top:12px;
+  color:var(--muted);
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+
+.avatar{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#35d9ff,#4f8cff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-weight:800;
+  color:#06101f;
+}
+
+.profile small{
+  color:var(--muted);
+  display:block;
+  font-size:10px;
+  margin-top:2px;
+}
+
+/* PAGES */
+.page{display:none}
+.page.active{display:block}
+
+.hero{
+  background:
+    linear-gradient(120deg,rgba(79,140,255,.17),rgba(155,124,255,.08)),
+    var(--panel);
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:28px;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.hero:after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  border-radius:50%;
+  right:-80px;
+  top:-100px;
+  background:rgba(79,140,255,.12);
+  filter:blur(5px);
+}
+
+.hero-label{
+  color:var(--cyan);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.5px;
+  margin-bottom:9px;
+}
+
+.hero h2{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:var(--muted);
+  max-width:700px;
+  line-height:1.6;
+}
+
+.badges{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
+.badge{
+  padding:7px 11px;
+  border-radius:8px;
+  font-size:10px;
+  font-weight:700;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+}
+
+.badge.green{color:var(--green)}
+.badge.blue{color:var(--cyan)}
+.badge.orange{color:var(--orange)}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.card{
+  background:rgba(13,23,41,.9);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+}
+
+.stat{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.stat-icon{
+  width:40px;
+  height:40px;
+  border-radius:11px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(79,140,255,.12);
+  font-size:18px;
+}
+
+.stat h3{
+  font-size:25px;
+  margin-top:13px;
+}
+
+.stat p{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.section-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:13px;
+}
+
+.section-head h3{
+  font-size:16px;
+}
+
+.section-head span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* TABLE */
+.table-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  overflow:hidden;
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table th{
+  background:rgba(255,255,255,.025);
+  color:#7f91aa;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.8px;
+  text-align:left;
+  padding:14px 16px;
+}
+
+.table td{
+  padding:15px 16px;
+  border-top:1px solid rgba(32,48,74,.7);
+  font-size:12px;
+}
+
+.table tr:hover td{
+  background:rgba(79,140,255,.035);
+}
+
+.status{
+  padding:5px 8px;
+  border-radius:7px;
+  font-size:10px;
+  font-weight:700;
+}
+
+.status.todo{
+  color:var(--orange);
+  background:rgba(255,180,84,.10);
+}
+
+.status.done{
+  color:var(--green);
+  background:rgba(53,211,154,.10);
+}
+
+.status.urgent{
+  color:var(--red);
+  background:rgba(255,99,120,.10);
+}
+
+/* TWO COLUMNS */
+.two{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:20px;
+}
+
+/* ALERTS */
+.alert{
+  display:flex;
+  gap:12px;
+  padding:14px;
+  border-bottom:1px solid var(--line);
+}
+
+.alert:last-child{border-bottom:0}
+
+.alert-icon{
+  min-width:35px;
+  height:35px;
+  border-radius:10px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(255,180,84,.1);
+}
+
+.alert strong{
+  display:block;
+  font-size:12px;
+  margin-bottom:4px;
+}
+
+.alert p{
+  color:var(--muted);
+  font-size:11px;
+  line-height:1.5;
+}
+
+/* SCHEDULE */
+.schedule{
+  display:grid;
+  grid-template-columns:100px repeat(5,1fr);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+}
+
+.schedule div{
+  min-height:75px;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  padding:9px;
+  font-size:10px;
+}
+
+.schedule .head{
+  min-height:auto;
+  background:#101d32;
+  color:var(--cyan);
+  font-weight:800;
+  text-align:center;
+}
+
+.schedule .time{
+  color:#7f91aa;
+  background:#0b1526;
+  font-weight:700;
+}
+
+.subject{
+  background:rgba(79,140,255,.09);
+  border-radius:8px;
+  border:1px solid rgba(79,140,255,.18);
+  height:100%;
+}
+
+.subject strong{
+  display:block;
+  font-size:11px;
+  margin-bottom:4px;
+}
+
+.subject span{
+  color:#8ea1ba;
+  font-size:9px;
+}
+
+/* PEOPLE */
+.people{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.person{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.person-avatar{
+  width:43px;
+  height:43px;
+  border-radius:12px;
+  background:linear-gradient(135deg,#182c4c,#273c61);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:800;
+  color:#a9c7ff;
+}
+
+.person strong{
+  display:block;
+  font-size:12px;
+}
+
+.person span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* DOCUMENTS */
+.docs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.doc{
+  padding:17px;
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:var(--panel);
+  cursor:pointer;
+  transition:.2s;
+}
+
+.doc:hover{
+  transform:translateY(-2px);
+  border-color:#355681;
+}
+
+.doc-icon{
+  font-size:25px;
+  margin-bottom:12px;
+}
+
+.doc strong{
+  display:block;
+  font-size:12px;
+}
+
+.doc span{
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* BUTTON */
+.btn{
+  border:0;
+  border-radius:9px;
+  padding:9px 13px;
+  background:var(--blue);
+  color:white;
+  cursor:pointer;
+  font-weight:700;
+  font-size:11px;
+}
+
+.btn.secondary{
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+}
+
+/* FOOTER */
+footer{
+  text-align:center;
+  padding:30px 0 10px;
+  color:#586981;
+  font-size:10px;
+}
+
+/* MOBILE */
+@media(max-width:900px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+    width:100%;
+    padding:16px;
+  }
+
+  .mobile-menu{
+    display:block;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:white;
+    border-radius:10px;
+    padding:9px 12px;
+    cursor:pointer;
+  }
+
+  .topbar{
+    flex-wrap:wrap;
+  }
+
+  .search{
+    order:3;
+    flex-basis:100%;
+    max-width:none;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .two{
+    grid-template-columns:1fr;
+  }
+
+  .people,
+  .docs{
+    grid-template-columns:1fr;
+  }
+
+  .schedule{
+    overflow-x:auto;
+    min-width:700px;
+  }
+
+  .schedule-wrap{
+    overflow:auto;
+  }
+}
+
+@media(max-width:520px){
+  .hero h2{font-size:23px}
+  .grid{grid-template-columns:1fr}
+  .profile div{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+
+  <div class="brand">
+    <div class="logo">2B</div>
+    <div>
+      <h1>2AC B Portal</h1>
+      <p>Class Management</p>
+    </div>
+  </div>
+
+  <div class="nav-title">MENU PRINCIPAL</div>
+
+  <nav class="nav">
+    <button class="active" onclick="showPage('dashboard',this)">
+      <span class="nav-icon">⌂</span> Tableau de bord
+    </button>
+
+    <button onclick="showPage('exercices',this)">
+      <span class="nav-icon">📝</span> Exercices & devoirs
+    </button>
+
+    <button onclick="showPage('emploi',this)">
+      <span class="nav-icon">📅</span> Emploi du temps
+    </button>
+
+    <button onclick="showPage('eleves',this)">
+      <span class="nav-icon">👥</span> Élèves
+    </button>
+
+    <button onclick="showPage('professeurs',this)">
+      <span class="nav-icon">👨‍🏫</span> Professeurs
+    </button>
+
+    <button onclick="showPage('alertes',this)">
+      <span class="nav-icon">🔔</span> Alertes
+    </button>
+
+    <button onclick="showPage('documents',this)">
+      <span class="nav-icon">📁</span> Documents
+    </button>
+
+    <button onclick="showPage('infos',this)">
+      <span class="nav-icon">ℹ</span> Informations
+    </button>
+  </nav>
+
+  <div class="nav-title">CLASSE</div>
+
+  <nav class="nav">
+    <button onclick="showPage('delegue',this)">
+      <span class="nav-icon">🎖</span> Délégué
+    </button>
+
+    <button onclick="showPage('calendrier',this)">
+      <span class="nav-icon">🗓</span> Calendrier
+    </button>
+  </nav>
+
+  <div class="trial">
+    <strong>✦ FREE TRIAL — 14 JOURS</strong>
+    <span>Accès gratuit au portail de la classe pendant la période d'essai.</span>
+  </div>
+
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+
+    <div class="search">
+      <span class="search-icon">⌕</span>
+      <input id="searchInput" oninput="globalSearch()" placeholder="Rechercher un exercice, document, élève...">
+    </div>
+
+    <div class="profile">
+      <div class="avatar">W</div>
+      <div>
+        <strong>2AC B</strong>
+        <small>Élève / Classe</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <section id="dashboard" class="page active">
+
+    <div class="hero">
+      <div class="hero-label">PORTAIL OFFICIEL DE LA CLASSE</div>
+      <h2>Bienvenue dans 2AC B 👋</h2>
+      <p>
+        Espace numérique de la classe pour retrouver les exercices,
+        devoirs, emploi du temps, annonces, documents et informations importantes.
+      </p>
+
+      <div class="badges">
+        <span class="badge blue">● 2AC B</span>
+        <span class="badge green">● Classe active</span>
+        <span class="badge orange">FREE — 14 DAYS</span>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">EXERCICES</span>
+          <h3>12</h3>
+          <p>À consulter</p>
+        </div>
+        <div class="stat-icon">📝</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">DEVOIRS</span>
+          <h3>5</h3>
+          <p>Cette semaine</p>
+        </div>
+        <div class="stat-icon">📚</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">ÉLÈVES</span>
+          <h3>—</h3>
+          <p>Effectif de la classe</p>
+        </div>
+        <div class="stat-icon">👥</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">ALERTES</span>
+          <h3>3</h3>
+          <p>À consulter</p>
+        </div>
+        <div class="stat-icon">🔔</div>
+      </div>
+
+    </div>
+
+    <div class="two">
+
+      <div class="card">
+        <div class="section-head">
+          <h3>Prochains devoirs</h3>
+          <span>Cette semaine</span>
+        </div>
+
+        <div class="table-card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Matière</th>
+                <th>Travail</th>
+                <th>Date</th>
+                <th>État</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Mathématiques</td>
+                <td>Exercices — Série 1</td>
+                <td>06 Oct.</td>
+                <td><span class="status todo">À faire</span></td>
+              </tr>
+              <tr>
+                <td>Français</td>
+                <td>Lecture + questions</td>
+                <td>07 Oct.</td>
+                <td><span class="status todo">À faire</span></td>
+              </tr>
+              <tr>
+                <td>SVT</td>
+                <td>Révision chapitre 2</td>
+                <td>09 Oct.</td>
+                <td><span class="status done">Préparation</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <h3>Dernières alertes</h3>
+          <span>3 nouvelles</span>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">📢</div>
+          <div>
+            <strong>Information classe</strong>
+            <p>Nouvelle annonce disponible pour les élèves.</p>
+          </div>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">📅</div>
+          <div>
+            <strong>Emploi du temps</strong>
+            <p>Vérifiez les horaires de la semaine.</p>
+          </div>
+        </div>
+
+        <div class="alert">
+          <div class="alert-icon">📝</div>
+          <div>
+            <strong>Nouveau devoir</strong>
+            <p>Un nouvel exercice de mathématiques a été ajouté.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- EXERCICES -->
+  <section id="exercices" class="page">
+
+    <div class="hero">
+      <div class="hero-label">TRAVAIL SCOLAIRE</div>
+      <h2>Exercices & devoirs</h2>
+      <p>Retrouvez ici les travaux à faire et les exercices de la classe.</p>
+    </div>
+
+    <div class="table-card">
+      <table class="table searchable">
+        <thead>
+          <tr>
+            <th>Matière</th>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Date</th>
+            <th>État</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>Mathématiques</td>
+            <td>Fractions — Série 01</td>
+            <td>Exercices</td>
+            <td>06/10/2026</td>
+            <td><span class="status todo">À faire</span></td>
+          </tr>
+
+          <tr>
+            <td>Français</td>
+            <td>Compréhension de texte</td>
+            <td>Devoir</td>
+            <td>07/10/2026</td>
+            <td><span class="status urgent">Important</span></td>
+          </tr>
+
+          <tr>
+            <td>SVT</td>
+            <td>Le milieu naturel</td>
+            <td>Révision</td>
+            <td>09/10/2026</td>
+            <td><span class="status todo">À faire</span></td>
+          </tr>
+
+          <tr>
+            <td>Histoire-Géo</td>
+            <td>Recherche historique</td>
+            <td>Projet</td>
+            <td>12/10/2026</td>
+            <td><span class="status todo">En cours</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- EMPLOI -->
+  <section id="emploi" class="page">
+
+    <div class="hero">
+      <div class="hero-label">ORGANISATION</div>
+      <h2>Emploi du temps</h2>
+      <p>Planning hebdomadaire de la classe 2AC B.</p>
+    </div>
+
+    <div class="card">
+      <div class="schedule-wrap">
+        <div class="schedule">
+
+          <div class="head">Horaire</div>
+          <div class="head">Lundi</div>
+          <div class="head">Mardi</div>
+          <div class="head">Mercredi</div>
+          <div class="head">Jeudi</div>
+          <div class="head">Vendredi</div>
+
+          <div class="time">08:00<br>09:00</div>
+          <div><div class="subject"><strong>Maths</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Français</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>SVT</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Maths</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Arabe</strong><span>Salle —</span></div></div>
+
+          <div class="time">09:00<br>10:00</div>
+          <div><div class="subject"><strong>Français</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Maths</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Arabe</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Histoire-Géo</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>SVT</strong><span>Salle —</span></div></div>
+
+          <div class="time">10:30<br>11:30</div>
+          <div><div class="subject"><strong>Arabe</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>SVT</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Maths</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Français</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>EPS</strong><span>Salle —</span></div></div>
+
+          <div class="time">11:30<br>12:30</div>
+          <div><div class="subject"><strong>Histoire-Géo</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Anglais</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Français</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Arabe</strong><span>Salle —</span></div></div>
+          <div><div class="subject"><strong>Maths</strong><span>Salle —</span></div></div>
+
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ELEVES -->
+  <section id="eleves" class="page">
+
+    <div class="hero">
+      <div class="hero-label">MEMBRES</div>
+      <h2>Élèves de 2AC B</h2>
+      <p>Liste des membres de la classe.</p>
+    </div>
+
+    <div class="people">
+
+      <div class="card person">
+        <div class="person-avatar">W</div>
+        <div>
+          <strong>Wael Briki</strong>
+          <span>Délégué de classe</span>
+        </div>
+      </div>
+
+      <div class="card person">
+        <div class="person-avatar">S</div>
+        <div>
+          <strong>Élève 02</strong>
+          <span>Élève</span>
+        </div>
+      </div>
+
+      <div class="card person">
+        <div class="person-avatar">A</div>
+        <div>
+          <strong>Élève 03</strong>
+          <span>Élève</span>
+        </div>
+      </div>
+
+      <div class="card person">
+        <div class="person-avatar">M</div>
+        <div>
+          <strong>Élève 04</strong>
+          <span>Élève</span>
+        </div>
+      </div>
+
+      <div class="card person">
+        <div class="person-avatar">Y</div>
+        <div>
+          <strong>Élève 05</strong>
+          <span>Élève</span>
+        </div>
+      </div>
+
+      <div class="card person">
+        <div class="person-avatar">N</div>
+        <div>
+          <strong>Élève 06</strong>
+          <span>Élève</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- PROFESSEURS -->
+  <section id="professeurs" class="page">
+
+    <div class="hero">
+      <div class="hero-label">ENCADREMENT</div>
+      <h2>Professeurs</h2>
+      <p>Espace réservé aux informations générales des enseignants.</p>
+    </div>
+
+    <div class="table-card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Matière</th>
+            <th>Professeur</th>
+            <th>Informations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mathématiques</td>
+            <td>Professeur de Mathématiques</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Français</td>
+            <td>Professeur de Français</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>SVT</td>
+            <td>Professeur de SVT</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>Histoire-Géo</td>
+            <td>Professeur d'Histoire-Géo</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- ALERTES -->
+  <section id="alertes" class="page">
+
+    <div class="hero">
+      <div class="hero-label">NOTIFICATIONS</div>
+      <h2>Alertes & annonces</h2>
+      <p>Les informations importantes concernant la classe apparaissent ici.</p>
+    </div>
+
+    <div class="card">
+
+      <div class="alert">
+        <div class="alert-icon">📢</div>
+        <div>
+          <strong>Annonce de la classe</strong>
+          <p>Bienvenue sur le nouveau portail numérique de 2AC B.</p>
+        </div>
+      </div>
+
+      <div class="alert">
+        <div class="alert-icon">📝</div>
+        <div>
+          <strong>Devoir de mathématiques</strong>
+          <p>Une nouvelle série d'exercices est disponible.</p>
+        </div>
+      </div>
+
+      <div class="alert">
+        <div class="alert-icon">📅</div>
+        <div>
+          <strong>Emploi du temps</strong>
+          <p>Pensez à vérifier le planning avant chaque journée.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- DOCUMENTS -->
+  <section id="documents" class="page">
+
+    <div class="hero">
+      <div class="hero-label">RESSOURCES</div>
+      <h2>Documents de la classe</h2>
+      <p>Documents, cours, fichiers et ressources utiles.</p>
+    </div>
+
+    <div class="docs">
+
+      <div class="doc">
+        <div class="doc-icon">📄</div>
+        <strong>Règlement de classe</strong>
+        <span>Document officiel</span>
+      </div>
+
+      <div class="doc">
+        <div class="doc-icon">📚</div>
+        <strong>Cours & révisions</strong>
+        <span>Ressources scolaires</span>
+      </div>
+
+      <div class="doc">
+        <div class="doc-icon">📅</div>
+        <strong>Emploi du temps</strong>
+        <span>Planning hebdomadaire</span>
+      </div>
+
+      <div class="doc">
+        <div class="doc-icon">📝</div>
+        <strong>Fiches d'exercices</strong>
+        <span>Travaux de la classe</span>
+      </div>
+
+      <div class="doc">
+        <div class="doc-icon">📋</div>
+        <strong>Informations</strong>
+        <span>Notes administratives</span>
+      </div>
+
+      <div class="doc">
+        <div class="doc-icon">⭐</div>
+        <strong>Projets de classe</strong>
+        <span>Activités & projets</span>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- DELEGUE -->
+  <section id="delegue" class="page">
+
+    <div class="hero">
+      <div class="hero-label">RESPONSABILITÉ DE CLASSE</div>
+      <h2>Délégué de classe</h2>
+      <p>Informations relatives à la représentation et à l'organisation de la classe.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:20px">
+
+      <div class="person">
+        <div class="person-avatar" style="width:60px;height:60px;font-size:20px">W</div>
+
+        <div>
+          <strong style="font-size:15px">Wael Briki</strong>
+          <span>Délégué de la classe — 2AC B</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="grid">
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">MISSION</span>
+          <h3>01</h3>
+          <p>Représenter la classe</p>
+        </div>
+        <div class="stat-icon">🎖</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">COMMUNICATION</span>
+          <h3>02</h3>
+          <p>Relais élèves / administration</p>
+        </div>
+        <div class="stat-icon">💬</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">ORGANISATION</span>
+          <h3>03</h3>
+          <p>Suivi des informations</p>
+        </div>
+        <div class="stat-icon">📋</div>
+      </div>
+
+      <div class="card stat">
+        <div>
+          <span style="color:var(--muted);font-size:10px">CLASSE</span>
+          <h3>2AC B</h3>
+          <p>Année scolaire 2026–2027</p>
+        </div>
+        <div class="stat-icon">🏫</div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CALENDRIER -->
+  <section id="calendrier" class="page">
+
+    <div class="hero">
+      <div class="hero-label">AGENDA</div>
+      <h2>Calendrier scolaire</h2>
+      <p>Événements et dates importantes de la classe.</p>
+    </div>
+
+    <div class="table-card">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Événement</th>
+            <th>Catégorie</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>06/10/2026</td>
+            <td>Exercices de mathématiques</td>
+            <td>📚 Travail</td>
+          </tr>
+          <tr>
+            <td>07/10/2026</td>
+            <td>Devoir de français</td>
+            <td>📝 Devoir</td>
+          </tr>
+          <tr>
+            <td>09/10/2026</td>
+            <td>Révision SVT</td>
+            <td>📖 Révision</td>
+          </tr>
+          <tr>
+            <td>12/10/2026</td>
+            <td>Projet Histoire-Géo</td>
+            <td>🎯 Projet</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </section>
+
+  <!-- INFOS -->
+  <section id="infos" class="page">
+
+    <div class="hero">
+      <div class="hero-label">À PROPOS</div>
+      <h2>Informations de la classe</h2>
+      <p>Informations générales concernant le portail 2AC B.</p>
+    </div>
+
+    <div class="two">
+
+      <div class="card">
+        <div class="section-head">
+          <h3>Informations générales</h3>
+        </div>
+
+        <p style="color:var(--muted);font-size:12px;line-height:1.8">
+          <strong style="color:white">Classe :</strong> 2AC B<br>
+          <strong style="color:white">Année scolaire :</strong> 2026–2027<br>
+          <strong style="color:white">Délégué :</strong> Wael Briki<br>
+          <strong style="color:white">Portail :</strong> Class Portal<br>
+          <strong style="color:white">Statut :</strong> Actif
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="section-head">
+          <h3>Accès gratuit</h3>
+        </div>
+
+        <p style="color:var(--muted);font-size:12px;line-height:1.7">
+          Le portail est actuellement disponible gratuitement
+          pendant une période d'essai de <strong style="color:var(--cyan)">14 jours</strong>.
+          <br><br>
+          Après cette période, une offre d'abonnement pourra être proposée.
+          <strong style="color:white">Aucun blocage automatique n'est activé.</strong>
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    2AC B Class Portal • Année scolaire 2026–2027 • Built for the class
+  </footer>
+
+</main>
+</div>
+
+<script>
+
+function showPage(pageId,button){
+
+  document.querySelectorAll('.page').forEach(page=>{
+    page.classList.remove('active');
+  });
+
+  const target=document.getElementById(pageId);
+
+  if(target){
+    target.classList.add('active');
+  }
+
+  document.querySelectorAll('.nav button').forEach(btn=>{
+    btn.classList.remove('active');
+  });
+
+  if(button){
+    button.classList.add('active');
+  }
+
+  document.getElementById('sidebar').classList.remove('open');
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+}
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+function globalSearch(){
+
+  const value=document
+    .getElementById('searchInput')
+    .value
+    .toLowerCase()
+    .trim();
+
+  if(!value) return;
+
+  const elements=document.querySelectorAll(
+    '.searchable tbody tr, .doc, .person, .alert'
+  );
+
+  elements.forEach(element=>{
+    const text=element.innerText.toLowerCase();
+
+    element.style.display=
+      text.includes(value) ? '' : 'none';
+  });
+}
+
+</script>
+
+</body>
+</html>
